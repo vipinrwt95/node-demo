@@ -1,16 +1,19 @@
-const express=require('express');
-const path= require('path')
-const rootDir=require('../utility/path');
-const router=express.Router();
-router.get('/add-product',(req,res,next)=>{
-    res.sendFile(path.join(rootDir,'views','add-product.html'));
-    });
+const path = require('path');
 
-router.post('/add-product',(req,res)=>{
-       
-       res.redirect('/admin/add-product');
-    })
-    
+const express = require('express');
+
+const allproducts=require('../controllers/products');
+const { all } = require('./shop');
+
+const router = express.Router();
 
 
-module.exports=router;
+
+// /admin/add-product => GET
+router.get('/add-product',allproducts.addProductPage);
+
+// /admin/add-product => POST
+router.post('/add-product',allproducts.addproduct);
+
+exports.routes = router;
+
