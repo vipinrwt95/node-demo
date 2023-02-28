@@ -1,20 +1,22 @@
-const path=require('path')
-const express=require('express');
-const bodyParser=require('body-parser');
+const path = require('path');
 
-const app=express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const error=require('./controllers/error')
+const app = express();
 
-const adminRoutes=require('./routes/admin');
-const shopRoutes=require('./routes/shop');
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(express.static(path.join(__dirname,'public')));
-app.use('/admin',adminRoutes);
-app.use(shopRoutes); 
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-app.use((req,res,next)=>{
-     res.status(404).sendFile(path.join(__dirname,'views','error.html'))
-})
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/admin', adminData.routes);
+app.use(shopRoutes);
 
-app.listen(5000)
+app.use(error.get404);
+
+app.listen(3000);
